@@ -38,10 +38,6 @@
   'use strict';
   var undefined = (void 0); // Paranoia
 
-  // Beyond this value, index getters/setters (i.e. array[0], array[1]) are so slow to
-  // create, and consume so much memory, that the browser appears frozen.
-  var MAX_ARRAY_LENGTH = 1e5;
-
   // Approximations of internal ECMAScript conversion functions
   function Type(v) {
     switch(typeof v) {
@@ -103,8 +99,6 @@
   // ES5: Make obj[index] an alias for obj._getter(index)/obj._setter(index, value)
   // for index in 0 ... obj.length
   function makeArrayAccessors(obj) {
-    if (obj.length > MAX_ARRAY_LENGTH) throw RangeError('Array too large for polyfill');
-
     function makeArrayAccessor(index) {
       Object.defineProperty(obj, index, {
         'get': function() { return obj._getter(index); },
